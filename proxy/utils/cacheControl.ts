@@ -1,26 +1,10 @@
-const CACHE_MAX_AGE = 3600
-const SHARED_CACHE_MAX_AGE = 60
-
-export function updateCacheControlHeader(headerValue: string): string {
-  let result = updateCacheControlAge(headerValue, 'max-age', CACHE_MAX_AGE)
-  result = updateCacheControlAge(result, 's-maxage', SHARED_CACHE_MAX_AGE)
-
-  return result
-}
-
-function updateCacheControlAge(headerValue: string, type: 'max-age' | 's-maxage', cacheMaxAge: number): string {
-  const cacheControlDirectives = headerValue.split(', ')
-  const maxAgeIndex = cacheControlDirectives.findIndex(
-    (directive) => directive.split('=')[0].trim().toLowerCase() === type
-  )
-
-  if (maxAgeIndex === -1) {
-    cacheControlDirectives.push(`${type}=${cacheMaxAge}`)
-  } else {
-    const oldMaxAge = Number(cacheControlDirectives[maxAgeIndex].split('=')[1])
-    const newMaxAge = Math.min(cacheMaxAge, oldMaxAge)
-    cacheControlDirectives[maxAgeIndex] = `${type}=${newMaxAge}`
-  }
-
-  return cacheControlDirectives.join(', ')
+/**
+ * Front Door caches the agent by the origin's s-maxage, but forwards Cache-Control as it is.
+ * This copy without s-maxage is what browsers get, through the Front Door rule that overwrites Cache-Control with it.
+ */
+export function getBrowserCacheControl(headerValue: string): string {
+  return headerValue
+    .split(', ')
+    .filter((directive) => directive.split('=')[0].trim().toLowerCase() !== 's-maxage')
+    .join(', ')
 }

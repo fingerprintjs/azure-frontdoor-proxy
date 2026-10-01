@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { updateCacheControlHeader } from './cacheControl.ts'
+import { getBrowserCacheControl } from './cacheControl.ts'
 
-describe('updateCacheControlHeader', () => {
-  it('adjust max-age to lower value', () => {
-    expect(updateCacheControlHeader('public, max-age=36000, s-maxage=36000')).toBe('public, max-age=3600, s-maxage=60')
+describe('getBrowserCacheControl', () => {
+  it('removes s-maxage and keeps other directives as they are', () => {
+    expect(getBrowserCacheControl('public, max-age=3742, s-maxage=629157')).toBe('public, max-age=3742')
   })
 
-  it('keep existing smaller value', () => {
-    expect(updateCacheControlHeader('public, max-age=600, s-maxage=600')).toBe('public, max-age=600, s-maxage=60')
+  it('removes s-maxage in any position', () => {
+    expect(getBrowserCacheControl('s-maxage=10, public, max-age=600')).toBe('public, max-age=600')
   })
 
-  it('add max age if not exist', () => {
-    expect(updateCacheControlHeader('no-cache')).toBe('no-cache, max-age=3600, s-maxage=60')
+  it('keeps value without s-maxage unchanged', () => {
+    expect(getBrowserCacheControl('no-cache')).toBe('no-cache')
   })
 })
