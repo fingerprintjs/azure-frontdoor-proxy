@@ -147,6 +147,40 @@ describe('Agent Endpoint V4', () => {
     )
   })
 
+  test('Conditional response without content type gets agent cache headers', async () => {
+    const req = mockRequestGet('https://fp.domain.com', 'fpjs/web/v4/ujKG34hUYKLJKJ1F')
+
+    // A 304 has no body
+    requestSpy.mockImplementation((_url: any, _options: any, callback): any => {
+      callback(mockHttpResponse)
+      mockHttpResponse.emit('end')
+
+      return mockHttpRequest
+    })
+
+    Object.assign(mockHttpResponse, {
+      statusCode: 304,
+      headers: {
+        'cache-control': 'public, max-age=3613, s-maxage=575500',
+        age: '120',
+        'cache-tag': 'procdn',
+      },
+    })
+
+    const ctx = mockContext()
+
+    const res = await proxyFn(req, ctx)
+
+    expect(res.status).toBe(304)
+    expect(res.headers).toEqual(
+      new Headers({
+        age: '0',
+        'cache-control': 'public, max-age=3613, s-maxage=575500',
+        'x-fpjs-browser-cache-control': 'public, max-age=3613',
+      })
+    )
+  })
+
   test('Response headers are the same, but strict-transport-security is removed', async () => {
     const req = mockRequestGet('https://fp.domain.com', 'fpjs/web/v4/ujKG34hUYKLJKJ1F')
 

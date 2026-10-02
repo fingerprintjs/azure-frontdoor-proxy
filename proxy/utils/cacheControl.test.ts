@@ -14,6 +14,12 @@ describe('getBrowserCacheControl', () => {
     expect(getBrowserCacheControl('public,s-maxage=60,max-age=3600')).toBe('public, max-age=3600')
   })
 
+  it('keeps commas inside quoted values', () => {
+    expect(getBrowserCacheControl('public, ext="alpha,s-maxage=999", s-maxage=60, max-age=3600')).toBe(
+      'public, ext="alpha,s-maxage=999", max-age=3600'
+    )
+  })
+
   it('keeps value without s-maxage unchanged', () => {
     expect(getBrowserCacheControl('no-cache')).toBe('no-cache')
   })
