@@ -16,8 +16,8 @@ const BLACKLISTED_HEADERS_PREFIXES = ['x-edge-', 'x-arr-', 'x-site', 'x-azure-']
 
 const BLACKLISTED_REQUEST_HEADERS = new Set(['host', 'strict-transport-security'])
 const BLACKLISTED_RESPONSE_HEADERS = new Set(['strict-transport-security', 'transfer-encoding'])
-// Upstream age is replaced, and the upstream CDN's purge tag isn't exposed
-const AGENT_REPLACED_RESPONSE_HEADERS = new Set([AGE_HEADER_NAME, 'cache-tag'])
+// Upstream age and browser cache header are replaced, and the upstream CDN's purge tag isn't exposed
+const AGENT_REPLACED_RESPONSE_HEADERS = new Set([AGE_HEADER_NAME, BROWSER_CACHE_CONTROL_HEADER_NAME, 'cache-tag'])
 
 export function filterRequestHeaders(headers: Headers) {
   return Array.from(headers.entries()).reduce((result: { [key: string]: string }, [name, value]) => {

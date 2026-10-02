@@ -161,6 +161,16 @@ describe('updateResponseHeadersForAgentDownload', () => {
     expect(resultHeaders.get('cache-control')).toBe('no-cache')
     expect(resultHeaders.get('x-fpjs-browser-cache-control')).toBe('no-cache')
   })
+  it('ignores upstream browser cache header', () => {
+    const headers: IncomingHttpHeaders = {
+      'cache-control': 'public, max-age=600, s-maxage=600',
+      'x-fpjs-browser-cache-control': 'public, s-maxage=99999',
+    }
+
+    const resultHeaders = new Headers(updateResponseHeadersForAgentDownload(headers))
+
+    expect(resultHeaders.get('x-fpjs-browser-cache-control')).toBe('public, max-age=600')
+  })
 })
 
 describe('prepareHeadersForIngressAPI', () => {

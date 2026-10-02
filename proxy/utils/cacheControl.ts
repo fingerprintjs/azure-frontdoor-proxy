@@ -4,7 +4,8 @@
  */
 export function getBrowserCacheControl(headerValue: string): string {
   return headerValue
-    .split(', ')
-    .filter((directive) => directive.split('=')[0].trim().toLowerCase() !== 's-maxage')
+    .split(',')
+    .map((directive) => directive.trim())
+    .filter((directive) => directive !== '' && directive.split('=')[0].trim().toLowerCase() !== 's-maxage')
     .join(', ')
 }

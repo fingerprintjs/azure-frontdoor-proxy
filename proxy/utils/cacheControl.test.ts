@@ -10,6 +10,10 @@ describe('getBrowserCacheControl', () => {
     expect(getBrowserCacheControl('s-maxage=10, public, max-age=600')).toBe('public, max-age=600')
   })
 
+  it('removes s-maxage without whitespace around commas', () => {
+    expect(getBrowserCacheControl('public,s-maxage=60,max-age=3600')).toBe('public, max-age=3600')
+  })
+
   it('keeps value without s-maxage unchanged', () => {
     expect(getBrowserCacheControl('no-cache')).toBe('no-cache')
   })
