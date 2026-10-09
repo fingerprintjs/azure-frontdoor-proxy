@@ -132,7 +132,6 @@ describe('updateResponseHeadersForAgentDownload', () => {
     expect(resultHeaders.has('content-length')).toBe(true)
     expect(resultHeaders.has('x-edge-xxx')).toBe(false)
     expect(resultHeaders.get('cache-control')).toBe('public, max-age=40000, s-maxage=40000')
-    expect(resultHeaders.get('x-fpjs-browser-cache-control')).toBe('public, max-age=40000')
     expect(resultHeaders.has('strict-transport-security')).toBe(false)
     expect(resultHeaders.get('age')).toBe('0')
     expect(resultHeaders.has('cache-tag')).toBe(false)
@@ -159,17 +158,6 @@ describe('updateResponseHeadersForAgentDownload', () => {
     expect(resultHeaders.has('custom-header-1')).toBe(true)
     expect(resultHeaders.has('content-length')).toBe(true)
     expect(resultHeaders.get('cache-control')).toBe('no-cache')
-    expect(resultHeaders.get('x-fpjs-browser-cache-control')).toBe('no-cache')
-  })
-  it('ignores upstream browser cache header', () => {
-    const headers: IncomingHttpHeaders = {
-      'cache-control': 'public, max-age=600, s-maxage=600',
-      'x-fpjs-browser-cache-control': 'public, s-maxage=99999',
-    }
-
-    const resultHeaders = new Headers(updateResponseHeadersForAgentDownload(headers))
-
-    expect(resultHeaders.get('x-fpjs-browser-cache-control')).toBe('public, max-age=600')
   })
 })
 

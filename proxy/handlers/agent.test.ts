@@ -126,7 +126,7 @@ describe('Agent Endpoint', () => {
     expect(new URL(url).origin).toEqual(`https://${origin}`)
   })
 
-  test('Origin browser cache is passed as it is', async () => {
+  test('Origin browser cache higher than an hour is passed as it is', async () => {
     const req = mockRequestGet('https://fp.domain.com', 'fpjs/agent', {
       apiKey: 'ujKG34hUYKLJKJ1F',
       version: '5',
@@ -145,7 +145,6 @@ describe('Agent Endpoint', () => {
       new Headers({
         age: '0',
         'cache-control': 'public, max-age=3613',
-        'x-fpjs-browser-cache-control': 'public, max-age=3613',
         'content-type': 'text/javascript; charset=utf-8',
       })
     )
@@ -170,13 +169,12 @@ describe('Agent Endpoint', () => {
       new Headers({
         age: '0',
         'cache-control': 'public, max-age=100',
-        'x-fpjs-browser-cache-control': 'public, max-age=100',
         'content-type': 'text/javascript; charset=utf-8',
       })
     )
   })
 
-  test('Origin shared cache is passed to Front Door, browser copy has no s-maxage', async () => {
+  test('Origin shared cache is passed as it is', async () => {
     const req = mockRequestGet('https://fp.domain.com', 'fpjs/agent', {
       apiKey: 'ujKG34hUYKLJKJ1F',
       version: '5',
@@ -195,13 +193,12 @@ describe('Agent Endpoint', () => {
       new Headers({
         age: '0',
         'cache-control': 'public, max-age=3613, s-maxage=575500',
-        'x-fpjs-browser-cache-control': 'public, max-age=3613',
         'content-type': 'text/javascript; charset=utf-8',
       })
     )
   })
 
-  test('Origin shared cache lower than a minute is passed to Front Door', async () => {
+  test('Origin shared cache lower than a minute is passed as it is', async () => {
     const req = mockRequestGet('https://fp.domain.com', 'fpjs/agent', {
       apiKey: 'ujKG34hUYKLJKJ1F',
       version: '5',
@@ -220,7 +217,6 @@ describe('Agent Endpoint', () => {
       new Headers({
         age: '0',
         'cache-control': 'public, max-age=3613, s-maxage=10',
-        'x-fpjs-browser-cache-control': 'public, max-age=3613',
         'content-type': 'text/javascript; charset=utf-8',
       })
     )
@@ -259,7 +255,6 @@ describe('Agent Endpoint', () => {
       new Headers({
         age: '0',
         'cache-control': 'public, max-age=3613, s-maxage=575500',
-        'x-fpjs-browser-cache-control': 'public, max-age=3613',
       })
     )
   })
