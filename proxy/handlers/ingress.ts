@@ -73,7 +73,7 @@ export async function handleIngress({
 function getIngressAPIHost(region: string): string {
   const validRegion = getValidRegion(region)
 
-  const prefix = validRegion === Region.us ? '' : `${region}.`
+  const prefix = validRegion === Region.us ? '' : `${validRegion}.`
 
   return `https://${prefix}${config.ingressApi}`
 }
