@@ -1,3 +1,9 @@
+## 2.2.1
+
+### Patch Changes
+
+- Pass the origin's `Cache-Control` for the agent as it is, without capping `max-age` or adding `s-maxage`. Serve the agent with `Age: 0` and without the upstream `Cache-Tag`. Return upstream `304` responses instead of failing with `500`. ([da0aacd](https://github.com/fingerprintjs/azure-frontdoor-proxy/commit/da0aacdccc195a111ee788870508cbe461cca95f))
+
 ## 2.2.0
 
 ### Minor Changes
