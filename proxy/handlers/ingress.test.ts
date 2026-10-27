@@ -343,22 +343,25 @@ describe('Result Endpoint', function () {
     await proxyFn(req, ctx)
   })
 
-  test.each(['invalid', 'usa', 'EU', 'US', 'AP', '.invalid'])(
+  test.each(['invalid', 'usa', 'EU', 'US', 'AP', '.invalid', 'toString', 'constructor', 'hasOwnProperty'])(
     'Should set default (US) region when invalid region is provided in query parameter: %s',
     async (region) => {
       const req = mockRequestGet('https://fp.domain.com', 'fpjs/resultId', {
         region,
       })
 
+      let requestUrl: URL | undefined
       mockSuccessfulResponse({
         checkRequestUrl: (url) => {
-          expect(url.toString()).toBe(`${defaultOrigin}/${getSearchWithRegion(region)}`)
+          requestUrl = url
         },
       })
 
       const ctx = mockContext()
 
       await proxyFn(req, ctx)
+
+      expect(requestUrl?.toString()).toBe(`${defaultOrigin}/?region=${region}`)
     }
   )
 })

@@ -4,11 +4,13 @@ export enum Region {
   ap = 'ap',
 }
 
+function isRegion(region: string): region is Region {
+  return Object.values<string>(Region).includes(region)
+}
+
 export function getValidRegion(region: string): Region {
-  if (region in Region) {
-    // `region` is guaranteed to be a valid `Region` value by the `in` check above.
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return region as Region
+  if (isRegion(region)) {
+    return region
   }
 
   return Region.us
