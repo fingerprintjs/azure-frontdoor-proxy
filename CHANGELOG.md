@@ -1,3 +1,9 @@
+## 2.2.2
+
+### Patch Changes
+
+- Treat `region` query values that match object prototype keys, such as `toString`, as invalid and route them to the default `us` region ([dfe9ae7](https://github.com/fingerprintjs/azure-frontdoor-proxy/commit/dfe9ae7c4426001cc7a7ad2edd3e9775c71c2efa))
+
 ## 2.2.1
 
 ### Patch Changes
